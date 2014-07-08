@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rkit - Responsive web kit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
+    <link rel="stylesheet" href="css/prism.css"/>
+</head>
+<body>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    body {
+        background: #f1f1f1;
+        padding: 0;
+        margin: 0;
+    }
+    .block {
+        padding: 10px;
+    }
+    .block-1 {
+        background: #0b97c4;
+    }
+    .block-2 {
+        background: #2caec4;
+    }
+    .block-3 {
+        background: #78c4b3;
+    }
+    .side {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 20%;
+        padding: 20px;
+    }
+    .wrapper {
+        background: #fff;
+        padding: 20px;
+        width: 80%;
+        float: right;
+    }
+    .gallery img { height: 150px; margin: 5px; }
+    @media only screen and (max-width:768px) {
+        .side, .wrapper { width: 100%; }
+        .side {
+            position: static;
+        }
+        .wrapper { float: none; }
+    }
+</style>
+
+<div class="side">
+    <h1>RKit - responsive kit</h1>
+    <p>v.1.0.0</p>
+</div>
+
+<div class="wrapper">
+
+    <h3>RKit: getting started</h3>
+    1. Include the script on your page<br/>
+
+    <pre><code class="language-markup">&lt;script type="text/javascript" src="/js/dest/rkit.min.js"&gt;&lt;/script&gt;</code></pre>
+    2. Initialize all RKit modules
+    <pre><code class="language-markup">
+    &lt;script type="text/javascript"&gt;
+        $(function() {
+            RKit.init({
+                'media' : {
+                    'breakpoints' : {
+                    'M' : [768],
+                    'T' : [768, 1024],
+                    'D' : [1024]
+                    },
+                    'prefix' : 'media'
+                },
+                'yoga' : {
+                    className: 'js-push',
+                    tempClass: 'js-rkit-temp'
+                }
+            });
+        });
+    &lt;/script&gt;
+    </code></pre>
+
+    <h3>RKit: Media</h3>
+    <p>Observe media breakpoint and trigger event to window</p>
+
+    <b>Module Options:</b><br/>
+    <pre><code class="language-javascript">
+        'media' : {
+            'breakpoints' : {       // breakpoints
+                'M' : [768],
+                'T' : [768, 1024],
+                'D' : [1024]
+            },
+            'prefix' : 'media'      // media prefix
+        }
+    </code></pre>
+
+    <p><b>Code:</b></p>
+    <pre><code class="language-javascript">
+        var $media = $('#js-media');
+        $(window).on({
+            'mediaM' : function() {
+                $media.html('mediaM');
+            },
+            'mediaT' : function() {
+                $media.html('mediaT');
+            },
+            'mediaD' : function() {
+                $media.html('mediaD');
+            }
+        });
+    </code></pre>
+
+    <p><b>Example:</b></p>
+    Current media <b id="js-media"></b>, resize window to change it.
+
+    <h3>RKit: Yoga</h3>
+    <p>Move blocks anywhere in the DOM when trigger media breakpoint. Dependent on RKit: Media</p>
+
+    <b>Module Options:</b><br/>
+    <pre><code class="language-javascript">
+        'yoga' : {
+            className: 'js-push',     // observe the behavior of the blocks
+            tempClass: 'js-rkit-temp' // temporary class for moved blocks
+        }
+    </code></pre>
+    <b>Data Options:</b><br/>
+    <pre><code class="language-markup">
+        &lt;div class="js-push" data-push=".div-class" data-dir="before" data-bp="mediaM"&gt;&lt;/div&gt;
+
+        data-push="" // selector where push block
+        data-dir=""  // insert (before|after|append|prepend)
+        data-bp=""   // media breakpoint when move block ({prefix} + (M|T|D))
+    </code></pre>
+
+    <p><b>Code:</b></p>
+    <pre><code class="language-markup">
+        &lt;p class="block block-1">Block 1&lt;/p&gt;
+        &lt;p class="js-push block block-2" data-push=".block-1" data-dir="before" data-bp="mediaM">Block 2&lt;/p&gt;
+        &lt;p class="js-push block block-3" data-push=".block-2" data-dir="after" data-bp="mediaT">block 3&lt;/p&gt;
+    </code></pre>
+
+    <p><b>Example:</b></p>
+    <p class="block block-1">Block 1</p>
+    <p class="js-push block block-2" data-push=".block-1" data-dir="before" data-bp="mediaM">Block 2</p>
+    <p class="js-push block block-3" data-push=".block-2" data-dir="prepend" data-bp="mediaT">block 3</p>
+
+    <h3>RKit: Utility</h3>
+    <b>Helpers methods:</b><br/>
+    <pre><code class="language-javascript">
+        RKit.U.isMobile();         // check is mobile or tablet
+                                   // and return {boolean}
+
+        RKit.U.isRetina();         // check retina devices, return {boolean}
+
+        RKit.U.getViewPort(side);  // return (width|height|both) window viewport,
+                                   // By default return width;
+
+        RKit.U.imageLoader(selector, callback);   // simple image loader
+                                                  // selector - jquery object or string with class name, which contains images,
+                                                  // callback - function which we call after all images loaded
+    </code></pre>
+
+    <p>Images is: <b id="gallery-load">not load</b></p>
+    <div id="gallery" class="gallery"></div>
+
+
+
+</div>
+<script src="js/lib/jquery-1.9.1.min.js"></script>
+<script src="js/lib/prism.js"></script>
+<script src="js/dest/rkit.min.js"></script>
+<script>
+    RKit.init({
+        'media' : {
+            'breakpoints' : {
+                'M' : [768],
+                'T' : [768, 1024],
+                'D' : [1024]
+            },
+            'prefix' : 'media'
+        },
+        'yoga' : {
+            className: 'js-push',
+            tempClass: 'js-rkit-temp'
+        }
+    });
+
+
+
+    var $media = $('#js-media');
+    $(window).on({
+        'mediaM' : function() {
+            $media.html('mediaM');
+        },
+        'mediaT' : function() {
+            $media.html('mediaT');
+        },
+        'mediaD' : function() {
+            $media.html('mediaD');
+        }
+    });
+
+    var flickerAPI = 'https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=82d84de4dabb59f335e2b7bbb9f8f4c5&photoset_id=72157632124025299&format=json&nojsoncallback=1&api_sig=e150aa2494710114715065e9995754dd';
+    var flickrGallery = $('#gallery');
+    var imgTemp;
+    $.getJSON(flickerAPI).done(function( data ) {
+        $.each( data.photoset.photo, function( i, item ) {
+            imgTemp = '<img src="https://farm'+ item.farm +'.staticflickr.com/'+ item.server +'/'+ item.id +'_'+ item.secret +'_b.jpg" alt="'+ item.title +'"/>';
+            flickrGallery.append(imgTemp);
+        });
+        RKit.U.imageLoader('.gallery', function() {
+            $('#gallery-load').html('loaded');
+        });
+    });
+</script>
+</body>
+</html>
