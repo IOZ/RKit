@@ -60,7 +60,7 @@ RKit.Media = (function($) {
      * Get media break point
      */
     base.getMedia = function() {
-        WinW = RKit.U.getViewPort('width');
+        WinW = RKit.U.getViewPortWidth();
 
         /* mobile */
         if ( !(window[config.prefix + keys[0]]) && (WinW <= config.breakpoints.M[0] - 1) ) {

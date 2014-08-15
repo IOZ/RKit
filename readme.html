@@ -69,9 +69,9 @@
             RKit.init({
                 'media' : {
                     'breakpoints' : {
-                    'M' : [768],
-                    'T' : [768, 1024],
-                    'D' : [1024]
+                        'M' : [768],
+                        'T' : [768, 1024],
+                        'D' : [1024]
                     },
                     'prefix' : 'media'
                 },
@@ -157,18 +157,12 @@
 
         RKit.U.isRetina();         // check retina devices, return {boolean}
 
-        RKit.U.getViewPort(side);  // return (width|height|both) window viewport,
-                                   // By default return width;
+        RKit.U.getViewPortWidth(); // return viewport width
 
         RKit.U.imageLoader(selector, callback);   // simple image loader
                                                   // selector - jquery object or string with class name, which contains images,
                                                   // callback - function which we call after all images loaded
     </code></pre>
-
-    <p>Images is: <b id="gallery-load">not load</b></p>
-    <div id="gallery" class="gallery"></div>
-
-
 
 </div>
 <script src="js/lib/jquery-1.9.1.min.js"></script>
@@ -190,8 +184,6 @@
         }
     });
 
-
-
     var $media = $('#js-media');
     $(window).on({
         'mediaM' : function() {
@@ -205,18 +197,6 @@
         }
     });
 
-    var flickerAPI = 'https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=82d84de4dabb59f335e2b7bbb9f8f4c5&photoset_id=72157632124025299&format=json&nojsoncallback=1&api_sig=e150aa2494710114715065e9995754dd';
-    var flickrGallery = $('#gallery');
-    var imgTemp;
-    $.getJSON(flickerAPI).done(function( data ) {
-        $.each( data.photoset.photo, function( i, item ) {
-            imgTemp = '<img src="https://farm'+ item.farm +'.staticflickr.com/'+ item.server +'/'+ item.id +'_'+ item.secret +'_b.jpg" alt="'+ item.title +'"/>';
-            flickrGallery.append(imgTemp);
-        });
-        RKit.U.imageLoader('.gallery', function() {
-            $('#gallery-load').html('loaded');
-        });
-    });
 </script>
 </body>
 </html>

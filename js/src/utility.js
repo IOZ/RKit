@@ -11,40 +11,23 @@ RKit.Utility = (function($) {
 
     /**
      * Get view port width
-     * @param side
      * @returns {*}
      */
 
-    base.getViewPort = function(side) {
-        var side = side || 'width';
-        var viewport = { width: 0, height: 0 };
+    base.getViewPortWidth = function() {
+        var viewPortWidth;
 
         if (typeof window.innerWidth != 'undefined') {
-            viewport.width  = window.innerWidth;
-            viewport.height = window.innerHeight;
+            viewPortWidth  = window.innerWidth;
         }
-        // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
         else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth != 0) {
-            viewport.width  = document.documentElement.clientWidth;
-            viewport.height = document.documentElement.clientHeight;
+            viewPortWidth  = document.documentElement.clientWidth;
         }
-        // older versions of IE
         else {
-            viewport.width  = document.getElementsByTagName('body')[0].clientWidth;
-            viewport.height = document.getElementsByTagName('body')[0].clientHeight;
+            viewPortWidth  = document.getElementsByTagName('body')[0].clientWidth;
         }
 
-        switch(side) {
-            case 'width':
-                return viewport.width;
-                break;
-            case 'height':
-                return viewport.height;
-                break;
-            case 'both':
-                return viewport;
-                break;
-        }
+        return viewPortWidth;
     };
 
     /**
