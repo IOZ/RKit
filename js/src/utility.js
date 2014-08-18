@@ -58,7 +58,6 @@ RKit.Utility = (function($) {
 
         if (typeof container === "object") {
             target = container;
-            console.log(0);
         } else if (typeof container === "string") {
             target = $(container);
         }

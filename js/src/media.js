@@ -4,35 +4,26 @@
 RKit.Media = (function($) {
     'use strict';
 
-    var base, config, Win, WinW, keys, MT, TD, mediaList, prefix;
+    var base, config, Win, WinW, keys;
 
     /* default config */
     config = {
-        'breakpoints': {
-            'M' : [768],
-            'T' : [768, 1024],
-            'D' : [1024]
-        },
-        'prefix' : 'media'
+        'breakpoints': [
+            ['mediaM', 768],
+            ['mediaT', [768, 1024]],
+            ['mediaD', 1024]
+        ]
     };
 
-    keys = Object.keys(config.breakpoints);
-    MT = keys[0] + '' + keys[1];
-    TD = keys[1] + '' + keys[2];
-
-    mediaList = keys.slice(0);
-    mediaList.push(MT, TD);
-
-    /* stash public object */
+    /* stash public methods */
     base = {};
 
     /**
      * Reset all media flags
      */
     base.resetMedia = function() {
-        var mediaListLength = mediaList.length;
-        for(var i = 0; i<mediaListLength; i++) {
-            window[config.prefix + mediaList[i]] = false;
+        for(var i = 0, mediaLength = config.breakpoints.length; i < mediaLength; i++) {
+            window[config.breakpoints[i][0]] = false;
         }
     };
 
@@ -45,40 +36,35 @@ RKit.Media = (function($) {
         base.resetMedia();
 
         /* set media */
-        window[config.prefix + media] = true;
+        window[media] = true;
 
         /* trigger event */
-        Win.trigger(config.prefix + media);
+        Win.trigger(media);
 
         /* RKit Module: Yoga */
         if ( typeof RKit.Y === "object" ) {
-            RKit.Y.move(config.prefix + media);
+            RKit.Y.move(media);
         }
     };
-
     /**
      * Get media break point
      */
     base.getMedia = function() {
         WinW = RKit.U.getViewPortWidth();
-
         /* mobile */
-        if ( !(window[config.prefix + keys[0]]) && (WinW <= config.breakpoints.M[0] - 1) ) {
-            base.setMedia(keys[0]);
+        if ( !(window[ config.breakpoints[0][0] ]) && (WinW <= config.breakpoints[0][1] - 1) ) {
+            base.setMedia(config.breakpoints[0][0]);
         }
 
         /* tablet */
-        if ( !(window[config.prefix + keys[1]]) && (WinW >= config.breakpoints.T[0] && WinW <= config.breakpoints.T[1]) ) {
-            base.setMedia(keys[1]);
+        if ( !(window[ config.breakpoints[1][0] ]) && (WinW >= config.breakpoints[1][1] && WinW <= config.breakpoints[1][2]) ) {
+            base.setMedia(config.breakpoints[1][0]);
         }
 
         /* desktop */
-        if ( !(window[config.prefix + keys[2]]) && WinW > config.breakpoints.D[0]) {
-            base.setMedia(keys[2]);
+        if ( !(window[ config.breakpoints[2][0] ]) && WinW > config.breakpoints[2][1]) {
+            base.setMedia(config.breakpoints[2][0]);
         }
-
-        /* TODO: mobile & tablet */
-        /* TODO: tablet & desktop */
 
     };
 

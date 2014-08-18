@@ -16,8 +16,18 @@
         padding: 0;
         margin: 0;
     }
+    .block-list {
+        margin: 0 0 25px;
+        overflow: hidden;
+    }
     .block {
-        padding: 10px;
+        width: 23%;
+        margin: 0 1%;
+        float: left;
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+        color: #fff;
     }
     .block-1 {
         background: #0b97c4;
@@ -27,6 +37,9 @@
     }
     .block-3 {
         background: #78c4b3;
+    }
+    .block-4 {
+        background: #8EE7D3;
     }
     .side {
         position: fixed;
@@ -48,6 +61,11 @@
             position: static;
         }
         .wrapper { float: none; }
+        .block {
+            width: 98%;
+            margin: 1%;
+            float: none;
+        }
     }
 </style>
 
@@ -68,12 +86,11 @@
         $(function() {
             RKit.init({
                 'media' : {
-                    'breakpoints' : {
-                        'M' : [768],
-                        'T' : [768, 1024],
-                        'D' : [1024]
-                    },
-                    'prefix' : 'media'
+                    'breakpoints' : [
+                        ['mediaM', 768],
+                        ['mediaT', 768, 1024],
+                        ['mediaD', 1024]
+                    ]
                 },
                 'yoga' : {
                     className: 'js-push',
@@ -90,12 +107,11 @@
     <b>Module Options:</b><br/>
     <pre><code class="language-javascript">
         'media' : {
-            'breakpoints' : {       // breakpoints
-                'M' : [768],
-                'T' : [768, 1024],
-                'D' : [1024]
-            },
-            'prefix' : 'media'      // media prefix
+            'breakpoints' : [           // breakpoints
+                ['mediaM', 768],
+                ['mediaT', 768, 1024],
+                ['mediaD', 1024]
+            ]
         }
     </code></pre>
 
@@ -119,7 +135,7 @@
     Current media <b id="js-media"></b>, resize window to change it.
 
     <h3>RKit: Yoga</h3>
-    <p>Move blocks anywhere in the DOM when trigger media breakpoint. Dependent on RKit: Media</p>
+    <p>Move blocks anywhere in the DOM when invoke trigger media breakpoint. Dependent on RKit: Media</p>
 
     <b>Module Options:</b><br/>
     <pre><code class="language-javascript">
@@ -134,20 +150,24 @@
 
         data-push="" // selector where push block
         data-dir=""  // insert (before|after|append|prepend)
-        data-bp=""   // media breakpoint when move block ({prefix} + (M|T|D))
+        data-bp=""   // media breakpoint when move block (mediaM|mediaT|mediaD)
     </code></pre>
 
     <p><b>Code:</b></p>
     <pre><code class="language-markup">
         &lt;p class="block block-1">Block 1&lt;/p&gt;
         &lt;p class="js-push block block-2" data-push=".block-1" data-dir="before" data-bp="mediaM">Block 2&lt;/p&gt;
-        &lt;p class="js-push block block-3" data-push=".block-2" data-dir="after" data-bp="mediaT">block 3&lt;/p&gt;
+        &lt;p class="js-push block block-3" data-push=".block-2" data-dir="before" data-bp="mediaT">block 3&lt;/p&gt;
+        &lt;p class="block block-4">block 4&lt;/p&gt;
     </code></pre>
 
     <p><b>Example:</b></p>
-    <p class="block block-1">Block 1</p>
-    <p class="js-push block block-2" data-push=".block-1" data-dir="before" data-bp="mediaM">Block 2</p>
-    <p class="js-push block block-3" data-push=".block-2" data-dir="prepend" data-bp="mediaT">block 3</p>
+    <div class="block-list">
+        <p class="block block-1">Block 1</p>
+        <p class="js-push block block-2" data-push=".block-1" data-dir="before" data-bp="mediaM">Block 2</p>
+        <p class="js-push block block-3" data-push=".block-2" data-dir="before" data-bp="mediaT">block 3</p>
+        <p class="block block-4">block 4</p>
+    </div>
 
     <h3>RKit: Utility</h3>
     <b>Helpers methods:</b><br/>
@@ -171,12 +191,11 @@
 <script>
     RKit.init({
         'media' : {
-            'breakpoints' : {
-                'M' : [768],
-                'T' : [768, 1024],
-                'D' : [1024]
-            },
-            'prefix' : 'media'
+            'breakpoints' : [
+                ['mediaM', 768],
+                ['mediaT', 768, 1024],
+                ['mediaD', 1024]
+            ],
         },
         'yoga' : {
             className: 'js-push',
