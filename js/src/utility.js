@@ -1,20 +1,12 @@
 /**
- * RKit Utility
+ * RKit Helper Methods
  */
-RKit.Utility = (function($) {
+(function($) {
     'use strict';
 
-    var base;
+    window.RKit = RKit || {};
 
-    /* stash public object */
-    base = {};
-
-    /**
-     * Get view port width
-     * @returns {*}
-     */
-
-    base.getViewPortWidth = function() {
+    RKit.getViewPortWidth = function() {
         var viewPortWidth;
 
         if (typeof window.innerWidth != 'undefined') {
@@ -33,15 +25,15 @@ RKit.Utility = (function($) {
     /**
      * Detect mobile
      */
-    base.isMobile = function() {
+    RKit.isMobile = function() {
         var re = /(Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone)/i;
         return re.test(window.navigator.userAgent)
     };
 
     /**
-     * Retina displays
+     * Detect retina displays
      */
-    base.isRetina = function() {
+    RKit.isRetina = function() {
         if (window.devicePixelRatio) {
             return window.devicePixelRatio >= 2;
         } else {
@@ -53,7 +45,7 @@ RKit.Utility = (function($) {
      * Image loader
      * @param {object} container - jquery object which contains images
      */
-    base.imageLoader = function(container, fn) {
+    RKit.imageLoader = function(container, fn) {
         var target, n, c, images, image;
 
         if (typeof container === "object") {
@@ -78,8 +70,4 @@ RKit.Utility = (function($) {
         });
     };
 
-    return base;
 })(jQuery);
-
-/* shortcut */
-RKit.U = RKit.Utility;

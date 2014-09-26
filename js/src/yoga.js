@@ -1,101 +1,140 @@
 /**
  * RKit: yoga
- * smart block move
+ * move block from one place to another with reverting when breakpoint was leave
  *
  * Used data attributes
  * data-push="{selector}"
- * data-dir="{before|after|append|prepend}"
+ * data-dir="{after|before|append|prepend}"
  * data-bp="{media{M|T|D}}"
  */
 RKit.Yoga = (function($) {
    'use strict';
 
-    var base, config;
+    var api, config;
 
     /* default config */
     config = {
-        className: 'js-push',
-        tempClass: 'js-rkit-temp'
+        dataPush: "push"
     };
 
-    base = {};
+    api = {};
 
     /**
      * Blocks storage
      * @type {Array}
      */
-    base.blocksStorage = [];
-
-    /**
-     * Move block
-     * @param media
-     */
-    base.move = function(media) {
-        var i, len, pushTo, clone;
-        len = base.blocksStorage.length;
-        for (i = 0; i < len; i++) {
-            if ( base.blocksStorage[i].pushBreakPoint == media && !base.blocksStorage[i].isInsert ) {
-                pushTo = $(base.blocksStorage[i].pushTo);
-                clone = base.blocksStorage[i].$block.clone().addClass(config.tempClass + '-' + i);
-
-                switch (base.blocksStorage[i].pushDir) {
-                    case 'before':
-                        pushTo.before(clone);
-                        break;
-                    case 'after':
-                        pushTo.after(clone);
-                        break;
-                    case 'append':
-                        pushTo.append(clone);
-                        break;
-                    case 'prepend':
-                        pushTo.prepend(clone);
-                        break;
-                }
-                base.blocksStorage[i].isInsert = true;
-                base.blocksStorage[i].$block.hide();
-            } else if ( base.blocksStorage[i].pushBreakPoint == media && base.blocksStorage[i].isInsert ) {
-                base.blocksStorage[i].$block.hide();
-                $('.' + config.tempClass + '-' + i).show();
-            } else if ( base.blocksStorage[i].pushBreakPoint !== media && base.blocksStorage[i].isInsert ) {
-                base.blocksStorage[i].$block.show();
-                $('.' + config.tempClass + '-' + i).hide();
-            }
-        }
-    };
+    api.blocksStorage = [];
 
     /**
      * Cache all blocks
      */
-    base.getBlocks = function() {
-        var block, pushTo, pushDir, pushBreakPoint;
-        $('.' + config.className).each(function() {
-            block = $(this);
-            pushTo = block.data('push');
-            pushDir = block.data('dir');
-            pushBreakPoint = block.data('bp');
+    api.getBlocks = function() {
+        var $block, $pushTo, pushDir, pushBreakPoint, $startBlockPos, startDir;
+        $("[data-" + config.dataPush +"]").each(function() {
+            $block = $(this);
+            $pushTo = $($block.data(config.dataPush));
+            pushDir = $block.data('dir');
+            pushBreakPoint = $block.data('bp');
 
-            base.blocksStorage.push({
-                $block: block,
-                pushTo: pushTo,
+            /* find initial block position */
+            if ($block.prev().length) {
+                $startBlockPos = $block.prev();
+                startDir = "after";
+            } else if ($block.next().length) {
+                $startBlockPos = $block.next();
+                startDir = "before";
+            } else {
+                $startBlockPos = $block.parent();
+                startDir = "append";
+            }
+
+            api.blocksStorage.push({
+                $block: $block,
+                $pushTo: $pushTo,
                 pushDir: pushDir,
                 pushBreakPoint: pushBreakPoint,
+                $startBlockPos: $startBlockPos,
+                startDir: startDir,
                 isInsert: false
             });
         });
     };
 
     /**
-     * Initialize
+     * Move block
+     * @param media
      */
-    base.init = function(conf) {
-        if (typeof conf === "object") {
-            config = $.extend({}, config, conf);
+    api.move = function(media) {
+        var i, len, $pushTo, $block, isInsert, breakPoint, dir, $startBlockPos, startDir;
+        len = api.blocksStorage.length;
+        for (i = 0; i < len; i++) {
+
+            $pushTo = api.blocksStorage[i].$pushTo;
+            $block = api.blocksStorage[i].$block;
+            breakPoint = api.blocksStorage[i].pushBreakPoint;
+            dir = api.blocksStorage[i].pushDir;
+            $startBlockPos = api.blocksStorage[i].$startBlockPos;
+            startDir = api.blocksStorage[i].startDir;
+            isInsert = api.blocksStorage[i].isInsert;
+
+            if ( breakPoint == media && !isInsert ) {
+                switch (dir) {
+                    case 'before':
+                        $block.insertBefore($pushTo);
+                        break;
+                    case 'after':
+                        $block.insertAfter($pushTo);
+                        break;
+                    case 'append':
+                        $block.appendTo($pushTo);
+                        break;
+                    case 'prepend':
+                        $block.prependTo($pushTo);
+                        break;
+                }
+                api.blocksStorage[i].isInsert = true;
+            } else if ( breakPoint == media && isInsert ) {
+                switch (dir) {
+                    case 'before':
+                        $block.insertBefore($pushTo);
+                        break;
+                    case 'after':
+                        $block.insertAfter($pushTo);
+                        break;
+                    case 'append':
+                        $block.appendTo($pushTo);
+                        break;
+                    case 'prepend':
+                        $block.prependTo($pushTo);
+                        break;
+                }
+            } else if ( breakPoint !== media && isInsert ) {
+                switch (startDir) {
+                    case 'before':
+                        $block.insertBefore($startBlockPos);
+                        break;
+                    case 'after':
+                        $block.insertAfter($startBlockPos);
+                        break;
+                    case 'append':
+                        $block.appendTo($startBlockPos);
+                        break;
+                    case 'prepend':
+                        $block.prependTo($startBlockPos);
+                        break;
+                }
+            }
         }
-        base.getBlocks();
     };
 
-    return base;
+    /**
+     * Initialize
+     */
+    api.init = function() {
+        api.getBlocks();
+    };
+
+    return api;
 })(jQuery);
 
 RKit.Y = RKit.Yoga;

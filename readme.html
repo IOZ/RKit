@@ -12,6 +12,7 @@
         box-sizing: border-box;
     }
     body {
+        font: 16px/18px Arial, sans-serif;
         background: #f1f1f1;
         padding: 0;
         margin: 0;
@@ -28,6 +29,19 @@
         line-height: 100px;
         text-align: center;
         color: #fff;
+        position: relative;
+    }
+    .block .block {
+        position: absolute;
+        top: 50%;
+        height: 50px;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        margin: 0;
+        line-height: 50px;
+        opacity: .5;
+        border: 1px dashed #fff;
     }
     .block-1 {
         background: #0b97c4;
@@ -76,11 +90,11 @@
 
 <div class="wrapper">
 
-    <h3>RKit: getting started</h3>
-    1. Include the script on your page<br/>
+    <h3>Getting started</h3>
+    1. Include plugin to your page.<br/>
 
     <pre><code class="language-markup">&lt;script type="text/javascript" src="/js/dest/rkit.min.js"&gt;&lt;/script&gt;</code></pre>
-    2. Initialize all RKit modules
+    2. Initialize RKit.
     <pre><code class="language-markup">
     &lt;script type="text/javascript"&gt;
         $(function() {
@@ -92,96 +106,89 @@
                         ['mediaD', 1024]
                     ]
                 },
-                'yoga' : {
-                    className: 'js-push',
-                    tempClass: 'js-rkit-temp'
-                }
+                'yoga' : true
             });
         });
     &lt;/script&gt;
     </code></pre>
 
-    <h3>RKit: Media</h3>
-    <p>Observe media breakpoint and trigger event to window</p>
+    <h3>Module RKit:Media</h3>
+    <p>Trigger breakpoint events to window</p>
 
     <b>Module Options:</b><br/>
     <pre><code class="language-javascript">
-        'media' : {
-            'breakpoints' : [           // breakpoints
-                ['mediaM', 768],
-                ['mediaT', 768, 1024],
-                ['mediaD', 1024]
-            ]
-        }
+    'media' : {
+        'breakpoints' : [           // breakpoints
+            ['mediaM', 768],
+            ['mediaT', 768, 1024],
+            ['mediaD', 1024]
+        ]
+    }
     </code></pre>
 
     <p><b>Code:</b></p>
     <pre><code class="language-javascript">
-        var $media = $('#js-media');
-        $(window).on({
-            'mediaM' : function() {
-                $media.html('mediaM');
-            },
-            'mediaT' : function() {
-                $media.html('mediaT');
-            },
-            'mediaD' : function() {
-                $media.html('mediaD');
-            }
-        });
+    var $media = $('#js-media');
+    $(window).on({
+        'mediaM' : function() {
+            $media.html('mediaM');
+        },
+        'mediaT' : function() {
+            $media.html('mediaT');
+        },
+        'mediaD' : function() {
+            $media.html('mediaD');
+        }
+    });
     </code></pre>
 
     <p><b>Example:</b></p>
     Current media <b id="js-media"></b>, resize window to change it.
 
-    <h3>RKit: Yoga</h3>
-    <p>Move blocks anywhere in the DOM when invoke trigger media breakpoint. Dependent on RKit: Media</p>
+    <h3>Module RKit:Yoga</h3>
+    <p>Move blocks from one place to another, using data attributes as config. Depends from RKit:Media module, which trigger breakpoints events.</p>
 
     <b>Module Options:</b><br/>
     <pre><code class="language-javascript">
-        'yoga' : {
-            className: 'js-push',     // observe the behavior of the blocks
-            tempClass: 'js-rkit-temp' // temporary class for moved blocks
-        }
+    'yoga' : true // {boolean} enabled or disabled this module
     </code></pre>
     <b>Data Options:</b><br/>
     <pre><code class="language-markup">
-        &lt;div class="js-push" data-push=".div-class" data-dir="before" data-bp="mediaM"&gt;&lt;/div&gt;
+    &lt;div data-push=".div-class" data-dir="before" data-bp="mediaM"&gt;&lt;/div&gt;
 
-        data-push="" // selector where push block
-        data-dir=""  // insert (before|after|append|prepend)
-        data-bp=""   // media breakpoint when move block (mediaM|mediaT|mediaD)
+    data-push="" // selector, where current block will be moved
+    data-dir=""  // how insert (after|before|append|prepend) into data-push block
+    data-bp=""   // breakpoint, received from module RKit:Media (mediaM|mediaT|mediaD)
     </code></pre>
 
     <p><b>Code:</b></p>
     <pre><code class="language-markup">
-        &lt;p class="block block-1">Block 1&lt;/p&gt;
-        &lt;p class="js-push block block-2" data-push=".block-1" data-dir="before" data-bp="mediaM">Block 2&lt;/p&gt;
-        &lt;p class="js-push block block-3" data-push=".block-2" data-dir="before" data-bp="mediaT">block 3&lt;/p&gt;
-        &lt;p class="block block-4">block 4&lt;/p&gt;
+    &lt;p class="block block-1" data-push=".block-4" data-dir="after" data-bp="mediaT">Block 1&lt;/p&gt;
+    &lt;p class="block block-2">Block 2&lt;/p&gt;
+    &lt;p class="block block-3" data-push=".block-1" data-dir="append" data-bp="mediaM">block 3&lt;/p&gt;
+    &lt;p class="block block-4">block 4&lt;/p&gt;
     </code></pre>
 
     <p><b>Example:</b></p>
     <div class="block-list">
-        <p class="block block-1">Block 1</p>
-        <p class="js-push block block-2" data-push=".block-1" data-dir="before" data-bp="mediaM">Block 2</p>
-        <p class="js-push block block-3" data-push=".block-2" data-dir="before" data-bp="mediaT">block 3</p>
+        <p class="block block-1" data-push=".block-4" data-dir="after" data-bp="mediaT">Block 1</p>
+        <p class="block block-2">Block 2</p>
+        <p class="block block-3" data-push=".block-1" data-dir="append" data-bp="mediaM">block 3</p>
         <p class="block block-4">block 4</p>
     </div>
 
-    <h3>RKit: Utility</h3>
-    <b>Helpers methods:</b><br/>
+    <h3>Helper Methods</h3>
     <pre><code class="language-javascript">
-        RKit.U.isMobile();         // check is mobile or tablet
-                                   // and return {boolean}
+        RKit.isMobile();         // check is mobile or tablet
+                                 // and return {boolean}
 
-        RKit.U.isRetina();         // check retina devices, return {boolean}
+        RKit.isRetina();         // check retina devices, return {boolean}
 
-        RKit.U.getViewPortWidth(); // return viewport width
+        RKit.getViewPortWidth(); // return viewport width
 
-        RKit.U.imageLoader(selector, callback);   // simple image loader
-                                                  // selector - jquery object or string with class name, which contains images,
-                                                  // callback - function which we call after all images loaded
+        RKit.imageLoader(selector, callback);   // simple image loader
+                                                // selector - jquery object or string with class name, which contains images,
+                                                // callback - function which will be called after all images loaded
     </code></pre>
 
 </div>
@@ -195,7 +202,7 @@
                 ['mediaM', 768],
                 ['mediaT', 768, 1024],
                 ['mediaD', 1024]
-            ],
+            ]
         },
         'yoga' : {
             className: 'js-push',

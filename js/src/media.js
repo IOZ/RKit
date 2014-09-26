@@ -4,7 +4,7 @@
 RKit.Media = (function($) {
     'use strict';
 
-    var base, config, Win, WinW, keys;
+    var api, config, Win, WinW;
 
     /* default config */
     config = {
@@ -16,12 +16,12 @@ RKit.Media = (function($) {
     };
 
     /* stash public methods */
-    base = {};
+    api = {};
 
     /**
      * Reset all media flags
      */
-    base.resetMedia = function() {
+    api.resetMedia = function() {
         for(var i = 0, mediaLength = config.breakpoints.length; i < mediaLength; i++) {
             window[config.breakpoints[i][0]] = false;
         }
@@ -31,9 +31,9 @@ RKit.Media = (function($) {
      * Set media break point
      * @param media
      */
-    base.setMedia = function(media) {
+    api.setMedia = function(media) {
         /* reset all media */
-        base.resetMedia();
+        api.resetMedia();
 
         /* set media */
         window[media] = true;
@@ -49,21 +49,21 @@ RKit.Media = (function($) {
     /**
      * Get media break point
      */
-    base.getMedia = function() {
-        WinW = RKit.U.getViewPortWidth();
+    api.getMedia = function() {
+        WinW = RKit.getViewPortWidth();
         /* mobile */
         if ( !(window[ config.breakpoints[0][0] ]) && (WinW <= config.breakpoints[0][1] - 1) ) {
-            base.setMedia(config.breakpoints[0][0]);
+            api.setMedia(config.breakpoints[0][0]);
         }
 
         /* tablet */
         if ( !(window[ config.breakpoints[1][0] ]) && (WinW >= config.breakpoints[1][1] && WinW <= config.breakpoints[1][2]) ) {
-            base.setMedia(config.breakpoints[1][0]);
+            api.setMedia(config.breakpoints[1][0]);
         }
 
         /* desktop */
         if ( !(window[ config.breakpoints[2][0] ]) && WinW > config.breakpoints[2][1]) {
-            base.setMedia(config.breakpoints[2][0]);
+            api.setMedia(config.breakpoints[2][0]);
         }
 
     };
@@ -71,15 +71,15 @@ RKit.Media = (function($) {
     /**
      * Initialize
      */
-    base.init = function(conf) {
+    api.init = function(conf) {
         if (typeof conf === "object") {
             config = $.extend({}, config, conf);
         }
 
         Win = $(window);
-        setTimeout(base.getMedia, 0);
-        Win.resize(base.getMedia);
+        setTimeout(api.getMedia, 0);
+        Win.resize(api.getMedia);
     };
 
-    return base;
+    return api;
 })(jQuery);

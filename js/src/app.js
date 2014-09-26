@@ -9,7 +9,7 @@ RKit.init = function (conf) {
     }
 
     /* Module: Yoga */
-    if (typeof conf.yoga === "object") {
-        RKit.Y.init(conf.yoga);
+    if (conf.yoga) {
+        RKit.Y.init();
     }
 };
