@@ -46,7 +46,7 @@
      * @param {object} container - jquery object which contains images
      */
     RKit.imageLoader = function(container, fn) {
-        var target, n, c, images, image;
+        var target, n, c, images, image, imageIterator;
 
         if (typeof container === "object") {
             target = container;
@@ -57,16 +57,25 @@
         images = target.find('img');
         n = images.length;
         c = 0;
+        imageIterator = function() {
+            c++;
+            if (c === n) {
+                if (typeof fn === "function") {
+                    fn.call(this);
+                }
+            }
+        };
+
         images.each(function() {
             image = $(this);
-            image.one('load error', function() {
-                c++;
-                if (c === n) {
-                    if (typeof fn === "function") {
-                        fn.call(this);
-                    }
-                }
-            });
+            /* if image was cached */
+            if (image[0].complete) {
+                imageIterator();
+            } else {
+                image.one('load error', function() {
+                    imageIterator();
+                });
+            }
         });
     };
 

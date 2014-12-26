@@ -191,7 +191,21 @@
                                                 // callback - function which will be called after all images loaded
     </code></pre>
 
+    <p>
+        <h4>Image Loader</h4>
+        Image status <b id="js-gallery-load">loading</b>
+    </p>
+
+    <div class="gallery">
+        <img src="https://farm4.staticflickr.com/3927/15407589635_36bc44bf03_o.jpg" alt=""/>
+        <img src="https://farm4.staticflickr.com/3890/15242977291_38ed4d39c5_o.jpg" alt=""/>
+        <img src="https://farm8.staticflickr.com/7400/8749152771_61ba3b978b_o.jpg" alt=""/>
+        <img src="https://farm4.staticflickr.com/3752/10844344315_39f934f51e_o.jpg" alt=""/>
+        <img src="https://farm8.staticflickr.com/7290/11362826923_58b1275287_o.jpg" alt=""/>
+        <img src="https://farm6.staticflickr.com/5321/9688446318_152c8c9166_o.jpg" alt=""/>
+    </div>
 </div>
+
 <script src="js/lib/jquery-1.9.1.min.js"></script>
 <script src="js/lib/prism.js"></script>
 <script src="js/dest/rkit.min.js"></script>
@@ -221,6 +235,14 @@
         'mediaD' : function() {
             $media.html('mediaD');
         }
+    });
+
+    /* gallery */
+    var loadInfo = $('#js-gallery-load'),
+            gallery = $('.gallery');
+
+    RKit.imageLoader(gallery, function() {
+        loadInfo.text('loading finished');
     });
 
 </script>

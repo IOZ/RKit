@@ -1,3 +1,10 @@
+12/26/14
+---------
+- RKit:imageLoader component
+IE bag with caching images
+
+- Replace Grunt task to Gulp
+
 07/07/14
 ---------
 Release v1.0.0

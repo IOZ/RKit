@@ -1,4 +1,10 @@
 /**
+ * RKit - Responsive Kit which contains usefull components for develop reponsive web application.
+ * @version 1.0.0
+ * @date Fri Dec 26 2014 13:07:52 GMT+0100 (Central Europe Standard Time)
+ */ 
+
+/**
  * RKit - responsive web kit for developers
  * Core
  */
@@ -54,7 +60,7 @@ var RKit = {
      * @param {object} container - jquery object which contains images
      */
     RKit.imageLoader = function(container, fn) {
-        var target, n, c, images, image;
+        var target, n, c, images, image, imageIterator;
 
         if (typeof container === "object") {
             target = container;
@@ -65,16 +71,25 @@ var RKit = {
         images = target.find('img');
         n = images.length;
         c = 0;
+        imageIterator = function() {
+            c++;
+            if (c === n) {
+                if (typeof fn === "function") {
+                    fn.call(this);
+                }
+            }
+        };
+
         images.each(function() {
             image = $(this);
-            image.one('load error', function() {
-                c++;
-                if (c === n) {
-                    if (typeof fn === "function") {
-                        fn.call(this);
-                    }
-                }
-            });
+            /* if image was cached */
+            if (image[0].complete) {
+                imageIterator();
+            } else {
+                image.one('load error', function() {
+                    imageIterator();
+                });
+            }
         });
     };
 

@@ -1,24 +1,22 @@
 {
-  "name": "rkit",
+  "name": "RKit",
   "version": "1.0.0",
-  "description": "resposive kit",
+  "description": "Responsive Kit which contains usefull components for develop reponsive web application.",
   "main": "index.js",
   "directories": {
     "example": "examples"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [
     "responsive"
   ],
-  "author": "OnePica",
+  "author": "Astound eCommerce",
   "license": "ISC",
   "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-contrib-jshint": "~0.10.0",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-contrib-concat": "~0.4.0",
-    "grunt-contrib-uglify": "~0.5.0"
+    "gulp": "^3.8.10",
+    "gulp-concat": "^2.4.2",
+    "gulp-header": "^1.2.2",
+    "gulp-notify": "^2.1.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^1.0.2"
   }
 }
